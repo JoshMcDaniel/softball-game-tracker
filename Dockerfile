@@ -14,6 +14,10 @@ RUN mvn package -DskipTests
 FROM openjdk:17-oracle
 # Set the working directory in the container
 WORKDIR /app
+# Copy the secret file into the container
+COPY src/main/resources/serviceAccountKey.json /app/serviceAccountKey.json
+# Set the environment variable
+ENV SERVICE_ACCOUNT_KEY=/app/serviceAccountKey.json
 # Copy the jar to the production image from the builder stage.
 COPY --from=builder /app/target/*.jar /softball-game-tracker.jar
 # Run the web service on container startup.

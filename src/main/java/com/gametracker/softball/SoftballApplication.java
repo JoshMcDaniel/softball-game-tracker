@@ -17,17 +17,16 @@ public class SoftballApplication {
 
 	public static void main(String[] args) throws IOException {
 
-		// Load serviceAccountKey.json as a resource stream
-		ClassLoader classLoader = SoftballApplication.class.getClassLoader();
-		InputStream serviceAccountStream = classLoader.getResourceAsStream("serviceAccountKey.json");
+		String serviceAccountKeyPath = System.getenv("SERVICE_ACCOUNT_KEY");
+		FileInputStream serviceAccount = new FileInputStream(serviceAccountKeyPath);
 
-		if (serviceAccountStream == null) {
+		if (serviceAccount == null) {
 			// Handle the case when the resource is not found
 			throw new RuntimeException("serviceAccountKey.json not found in the classpath");
 		}
 
 		FirebaseOptions options = new FirebaseOptions.Builder()
-				.setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
+				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
 				.build();
 
 		FirebaseApp.initializeApp(options);
