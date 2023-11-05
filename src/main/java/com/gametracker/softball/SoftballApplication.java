@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 @SpringBootApplication
@@ -16,13 +17,17 @@ public class SoftballApplication {
 
 	public static void main(String[] args) throws IOException {
 
+		// Load serviceAccountKey.json as a resource stream
 		ClassLoader classLoader = SoftballApplication.class.getClassLoader();
+		InputStream serviceAccountStream = classLoader.getResourceAsStream("serviceAccountKey.json");
 
-		File file = new File(Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
-		FileInputStream serviceAccount = new FileInputStream(file.getAbsolutePath());
+		if (serviceAccountStream == null) {
+			// Handle the case when the resource is not found
+			throw new RuntimeException("serviceAccountKey.json not found in the classpath");
+		}
 
 		FirebaseOptions options = new FirebaseOptions.Builder()
-				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
+				.setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
 				.build();
 
 		FirebaseApp.initializeApp(options);
