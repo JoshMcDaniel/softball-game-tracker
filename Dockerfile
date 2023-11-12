@@ -6,7 +6,7 @@ FROM maven:3.8.5-openjdk-17 as builder
 # Set the working directory in the container
 WORKDIR /app
 
-RUN --mount=type=secret,id=_env,dst=/etc/secrets/serviceAccountKey.json cp /etc/secrets/serviceAccountKey.json
+RUN --mount=type=secret,id=serviceAccountKey,dst=etc/secrets/serviceAccountKey.json cat etc/secrets/serviceAccountKey.json
 
 # Copy the project files into the container
 COPY . .
