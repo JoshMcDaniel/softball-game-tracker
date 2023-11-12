@@ -1,24 +1,35 @@
+# syntax = docker/dockerfile:1.2
+
 # Use the official maven/Java 17 image to create a build artifact.
-FROM maven:3.8.4-openjdk-17 as builder
-# Set the working directory in the image to "/app".
-WORKDIR /app
-# Copy the pom.xml file to our app directory.
-COPY pom.xml .
-# Build all dependencies for offline use.
-RUN mvn dependency:go-offline -B
-# Copy the rest of the working directory contents into the image.
-COPY src ./src
-# Build the application.
-RUN mvn package -DskipTests
-# Use Oracle's Java 17 image for base image.
-FROM openjdk:17-oracle
+FROM maven:3.8.5-openjdk-17 as builder
+
 # Set the working directory in the container
 WORKDIR /app
-# Copy the secret file into the container
-COPY src/main/resources/serviceAccountKey.json /app/serviceAccountKey.json
-# Set the environment variable
-ENV SERVICE_ACCOUNT_KEY=/app/serviceAccountKey.json
-# Copy the jar to the production image from the builder stage.
-COPY --from=builder /app/target/*.jar /softball-game-tracker.jar
-# Run the web service on container startup.
-CMD ["java", "-jar", "/softball-game-tracker.jar"]
+
+RUN --mount=type=secret,id=_env,dst=/etc/secrets/serviceAccountKey.json cp /etc/secrets/serviceAccountKey.json
+
+# Copy the project files into the container
+COPY . .
+
+# Build the application
+RUN mvn clean package -DskipTests
+
+# Use OpenJDK 17 image for the base image
+FROM openjdk:17.0.1-jdk-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+RUN ls
+
+# Copy the JAR file from the builder stage to the final image
+COPY --from=builder /app/target/*.jar /app/softball-game-tracker.jar
+
+# Set the environment variable for the service account key file path
+ENV SERVICE_ACCOUNT_KEY=/app/etc/secrets/serviceAccountKey.json
+
+# Expose the port on which the Spring Boot application will run
+EXPOSE 8080
+
+# Run the Spring Boot application
+CMD ["java", "-jar", "/app/softball-game-tracker.jar"]

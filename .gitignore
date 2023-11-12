@@ -33,4 +33,4 @@ build/
 .vscode/
 
 # Firebase Firestore service account key JSON file
-/src/main/resources/serviceAccountKey.json
+/etc/secrets/*
