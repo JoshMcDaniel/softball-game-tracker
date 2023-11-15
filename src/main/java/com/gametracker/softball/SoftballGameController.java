@@ -2,6 +2,7 @@ package com.gametracker.softball;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -12,23 +13,31 @@ public class SoftballGameController {
         this.softballGameService = softballGameService;
     }
 
-    @PostMapping("/create")
-    public String createSoftballGame(@RequestBody SoftballGame softballGame) throws  InterruptedException, ExecutionException {
+    @PostMapping("/createGame")
+    public String createSoftballGame(@RequestBody SoftballGame softballGame)
+            throws InterruptedException, ExecutionException {
         return softballGameService.createSoftballGame(softballGame);
     }
 
-    @GetMapping("/get")
-    public SoftballGame getSoftballGame(@RequestParam String documentId) throws  InterruptedException, ExecutionException {
-        return softballGameService.getSoftballGame(documentId);
+    @GetMapping("/getGameById")
+    public SoftballGame getSoftballGame(@RequestParam String documentId)
+            throws InterruptedException, ExecutionException {
+        return softballGameService.getSoftballGameById(documentId);
     }
 
-    @PutMapping("/update")
-    public String updateSoftballGame(@RequestBody SoftballGame softballGame) throws  InterruptedException, ExecutionException {
+    @GetMapping("/getAllActiveGames")
+    public List<SoftballGame> getSoftballGame() throws InterruptedException, ExecutionException {
+        return softballGameService.getAllActiveSoftballGames();
+    }
+
+    @PutMapping("/updateGame")
+    public String updateSoftballGame(@RequestBody SoftballGame softballGame)
+            throws InterruptedException, ExecutionException {
         return softballGameService.updateSoftballGame(softballGame);
     }
 
-    @DeleteMapping("/delete")
-    public String deleteSoftballGame(@RequestParam String documentId) throws  InterruptedException, ExecutionException {
+    @DeleteMapping("/deleteGame")
+    public String deleteSoftballGame(@RequestParam String documentId) throws InterruptedException, ExecutionException {
         return softballGameService.deleteSoftballGame(documentId);
     }
 }
