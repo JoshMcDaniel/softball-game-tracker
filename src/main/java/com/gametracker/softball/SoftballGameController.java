@@ -20,6 +20,7 @@ public class SoftballGameController {
     }
 
     @GetMapping("/getGameById")
+    @CrossOrigin(origins = "${allowed.origin}")
     public SoftballGame getSoftballGame(@RequestParam String documentId)
             throws InterruptedException, ExecutionException {
         return softballGameService.getSoftballGameById(documentId);
