@@ -27,6 +27,7 @@ public class SoftballGameController {
     }
 
     @GetMapping("/getAllActiveGames")
+    @CrossOrigin(origins = "${allowed.origin}")
     public List<SoftballGame> getSoftballGame() throws InterruptedException, ExecutionException {
         return softballGameService.getAllActiveSoftballGames();
     }
