@@ -18,7 +18,8 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class SoftballGameService {
 
-    public String createSoftballGame(SoftballGame softballGame) throws ExecutionException, InterruptedException {
+    public String createSoftballGame(SoftballGameCreate gameData) throws ExecutionException, InterruptedException {
+        SoftballGame softballGame = new SoftballGame(gameData);
         Firestore dbFireStore = FirestoreClient.getFirestore();
         ApiFuture<WriteResult> collectionsApiFuture = (ApiFuture<WriteResult>) dbFireStore
                 .collection("activeSoftballGames").document(softballGame.getDocumentId()).set(softballGame);

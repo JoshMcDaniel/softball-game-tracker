@@ -14,7 +14,7 @@ public class SoftballGameController {
     }
 
     @PostMapping("/createGame")
-    public String createSoftballGame(@RequestBody SoftballGame softballGame)
+    public String createSoftballGame(@RequestBody SoftballGameCreate softballGame)
             throws InterruptedException, ExecutionException {
         return softballGameService.createSoftballGame(softballGame);
     }
