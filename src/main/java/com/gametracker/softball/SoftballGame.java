@@ -2,6 +2,7 @@ package com.gametracker.softball;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Map;
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class SoftballGame {
     private String documentId;
     private String homeTeamName;
